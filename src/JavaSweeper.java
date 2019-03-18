@@ -12,14 +12,16 @@ public class JavaSweeper extends JFrame {
     private JPanel panel;
     private final int COLS = 9;
     private final int ROWS = 9;
+    private final int BOMBS = 10;
     private final int IMAGE_SIZE = 50;
 
     public static void main(String[] args) {
-        new JavaSweeper().setVisible(true);
+        new JavaSweeper();
     }
 
     private JavaSweeper() {
-        game = new Game(COLS, ROWS);
+        game = new Game(COLS, ROWS, BOMBS);
+        game.start();
         setImages();
         initPanel();
         initFrame();
@@ -28,6 +30,7 @@ public class JavaSweeper extends JFrame {
     private void initPanel() {
         panel = new JPanel() {
             @Override
+            //прорисовывает элементы
             protected void paintComponent(Graphics g) {
                 super.paintComponent(g);
                 for (Coord coord : Ranges.getAllCoords()) {
@@ -35,12 +38,14 @@ public class JavaSweeper extends JFrame {
                 }
             }
         };
+        //устанавливает размеры panel
         panel.setPreferredSize(new Dimension(Ranges.getSize().x * IMAGE_SIZE, Ranges.getSize().y * IMAGE_SIZE));
+        //добавляет panel во frame
         add(panel);
     }
 
     private void initFrame() {
-        pack();
+        //останавливает выполнение программы при закрытие окна
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         setTitle("Java Sweeper");
         //размещает по центру экрана
@@ -49,6 +54,8 @@ public class JavaSweeper extends JFrame {
         setResizable(false);
         setVisible(true);
         setIconImage(getImage("icon"));
+        //задает размеры окна игры, чтобы в него поместились все компоненты
+        pack();
     }
 
     private void setImages() {

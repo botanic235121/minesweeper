@@ -1,10 +1,13 @@
 package sweeper;
 
 import java.util.ArrayList;
+import java.util.Random;
 
 public class Ranges {
-    public static Coord size;
-    public static ArrayList<Coord> allCoords;
+    //размер игрового поля
+    private static Coord size;
+    private static ArrayList<Coord> allCoords;
+    private static Random random = new Random();
 
     static void setSize(Coord _size) {
         size = _size;
@@ -23,4 +26,36 @@ public class Ranges {
     public static ArrayList<Coord> getAllCoords() {
         return allCoords;
     }
+
+    //проверка, чтобы не выйти за пределы поля
+    static boolean inRange(Coord coord) {
+        return coord.x >= 0 && coord.x < size.x &&
+                coord.y >= 0 && coord.y < size.y;
+    }
+
+    //получаем случайную координату (клетку)
+    static Coord getRandomCoord() {
+        return new Coord(random.nextInt(size.x), random.nextInt(size.y));
+    }
+
+    //Создаем список с соседними клетками
+    static ArrayList<Coord> getCoordsAround(Coord coord) {
+        Coord around;
+        ArrayList<Coord> list = new ArrayList<Coord>();
+        //перебираем соседние клетки по оси х и y
+        for (int x = coord.x - 1; x <= coord.x + 1; x++) {
+            for (int y = coord.y - 1; y <= coord.y + 1; y++) {
+                //проверяем не выходят ли координаты за пределы поля
+                if (inRange(around = new Coord(x, y))) {
+                    //проверяем не ровна ли проверяемая клетка текущей
+                    if (!around.equals(coord)){
+                        list.add(around);
+                    }
+                }
+            }
+        }
+        return list;
+    }
+
+
 }
