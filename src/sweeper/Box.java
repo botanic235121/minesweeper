@@ -16,6 +16,7 @@ public enum Box {
     FLAGED,
     BOMBED,
     NOBOMB;
+
     public Object image;
 
     //возвращает следующий элемент перечисления
