@@ -12,6 +12,7 @@ public class JavaSweeper extends JFrame {
 
     private Game game;
     private JPanel panel;
+    private JLabel label;
     private final int COLS = 9;
     private final int ROWS = 9;
     private final int BOMBS = 10;
@@ -25,8 +26,14 @@ public class JavaSweeper extends JFrame {
         game = new Game(COLS, ROWS, BOMBS);
         game.start();
         setImages();
+        initLabel();
         initPanel();
         initFrame();
+    }
+
+    private void initLabel() {
+        label = new JLabel("Welcome!");
+        add(label, BorderLayout.SOUTH);
     }
 
     private void initPanel() {
@@ -53,6 +60,11 @@ public class JavaSweeper extends JFrame {
                 if (e.getButton() == MouseEvent.BUTTON3) {
                     game.pressRightButton(coord);
                 }
+                //перезагружает игру при нажатии средней кнопки мыши
+                if (e.getButton() == MouseEvent.BUTTON2) {
+                    game.start();
+                }
+                label.setText(getMessage());
                 panel.repaint();
 
             }
@@ -68,14 +80,27 @@ public class JavaSweeper extends JFrame {
         //останавливает выполнение программы при закрытие окна
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         setTitle("Java Sweeper");
-        //размещает по центру экрана
-        setLocationRelativeTo(null);
         //запрещает изменение размеров окна
         setResizable(false);
         setVisible(true);
-        setIconImage(getImage("icon"));
         //задает размеры окна игры, чтобы в него поместились все компоненты
         pack();
+        //размещает по центру экрана
+        setLocationRelativeTo(null);
+        setIconImage(getImage("icon"));
+    }
+
+    private String getMessage() {
+        switch (game.getState()) {
+            case PLAYED:
+                return "PLAYING";
+            case BOMBED:
+                return "GAME OVER!";
+            case WINNER:
+                return "YOU ARE WINNER!";
+            default:
+                return "";
+        }
     }
 
     private void setImages() {

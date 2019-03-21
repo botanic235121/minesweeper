@@ -22,6 +22,10 @@ class Bomb {
         return bombMap.get(coord);
     }
 
+     int getTotalBombs() {
+        return totalBomb;
+    }
+
     //Запрещает устанавливать бомб больше, чем количество клеток поля / 2
     private void fixBombsCount() {
         int maxBombs = (Ranges.getSize().x * Ranges.getSize().y) / 2;
