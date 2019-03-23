@@ -27,7 +27,7 @@ public class Ranges {
         return allCoords;
     }
 
-    //проверка, чтобы не выйти за пределы поля
+    //проверка, чтобы не выйти за пределы игрового поля
     static boolean inRange(Coord coord) {
         return coord.x >= 0 && coord.x < size.x &&
                 coord.y >= 0 && coord.y < size.y;

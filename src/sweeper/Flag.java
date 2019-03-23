@@ -30,20 +30,50 @@ class Flag {
         }
     }
 
-    // Устанавливает поле CLOSED в переданную клетку
+    // Устанавливает значение CLOSED в переданную клетку
     void setClosedToBox(Coord coord) {
         flagMap.set(coord, Box.CLOSED);
     }
 
-    // Устанавливает поле OPENED в переданную клетку
+    // Устанавливает значение OPENED в переданную клетку
     void setOpenedToBox(Coord coord) {
         flagMap.set(coord, Box.OPENED);
         //при открытие клетки уменьшает количесто закрытых на 1
         countOfClosedBoxes--;
     }
 
-    // Устанавливает поле FLAGED в переданную клетку
+    // Устанавливает значение FLAGED в переданную клетку
     void setFlagedToBox(Coord coord) {
         flagMap.set(coord, Box.FLAGED);
+    }
+
+    // Устанавливает значение BOMBED в переданную клетку
+    void setBombedToBox(Coord coord) {
+        flagMap.set(coord, Box.BOMBED);
+    }
+
+    // Устанавливает значение OPENED в клетку с бомбой
+    void setOpenedToClosedBox(Coord coord) {
+        if (flagMap.get(coord) == Box.CLOSED) {
+            flagMap.set(coord, Box.OPENED);
+        }
+    }
+
+    // Устанавливает значение NOBOMB в клетку, помеченную FLAGED, но в которой нет бомбы
+    void setNoBombToFlagedSafeBox(Coord coord) {
+        if (flagMap.get(coord) == Box.FLAGED) {
+            flagMap.set(coord, Box.NOBOMB);
+        }
+    }
+
+    // Подсчитывает количесто флагов рядом с переданной клеткой
+    int getCountOfFlagedBoxesAround(Coord coord) {
+        int count = 0;
+        for (Coord around : Ranges.getCoordsAround(coord)) {
+            if (flagMap.get(around) == Box.FLAGED) {
+                count++;
+            }
+        }
+        return count;
     }
 }

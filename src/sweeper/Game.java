@@ -31,13 +31,16 @@ public class Game {
     }
 
     public void pressLeftButton(Coord coord) {
+        if (gameOver()) return;
         openBox(coord);
         checkWinner();
     }
 
     public void pressRightButton(Coord coord) {
+        if (gameOver()) return;
         flag.toggleFlagedToBox(coord);
     }
+
     //проверка на победу
     private void checkWinner() {
         if (state == GameState.PLAYED) {
@@ -52,7 +55,9 @@ public class Game {
     private void openBox(Coord coord) {
         //проверка состояния верхнего слоя (flagMap)
         switch (flag.get(coord)) {
+
             case OPENED:
+                setOpenedToClosedBoxesAroundNumber(coord);
                 return;
             case FLAGED:
                 return;
@@ -82,8 +87,40 @@ public class Game {
             openBox(around);
         }
     }
+
     //открывавет все бомбы при проигрыше
-    private void openBombs(Coord coord){
+    private void openBombs(Coord bombed) {
         state = GameState.BOMBED;
+        flag.setBombedToBox(bombed);
+        // Открывает все бомбы при проигрыше
+        for (Coord coord : Ranges.getAllCoords()) {
+            if (bomb.get(coord) == Box.BOMB) {
+                flag.setOpenedToClosedBox(coord);
+            } else
+                flag.setNoBombToFlagedSafeBox(coord);
+        }
+    }
+
+    // открывает соседние с номером клетки, если число установленных флагов равно этому номеру
+    private void setOpenedToClosedBoxesAroundNumber(Coord coord) {
+        if (flag.get(coord) != Box.BOMB) {
+            if (flag.getCountOfFlagedBoxesAround(coord) == bomb.get(coord).getNumber()) {
+                for (Coord around : Ranges.getCoordsAround(coord)) {
+                    if (flag.get(around) == Box.CLOSED)
+                        openBox(around);
+                }
+
+            }
+        }
+
+    }
+
+    // проверяет не проиграна ли игра
+    private boolean gameOver() {
+        if (state == GameState.PLAYED) {
+            return false;
+        } else {
+            return true;
+        }
     }
 }
